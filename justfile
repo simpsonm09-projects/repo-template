@@ -64,6 +64,9 @@ spec-check:
 # Everything CI requires.
 check: fmt-check lint complexity test test-workflow spec-check
 
+# Historical alias for `check`, kept for the support template.
+verify: check
+
 # Install the guarded git hook.
 hooks:
     git config --local core.hooksPath .githooks
