@@ -24,8 +24,9 @@ new event whose sender is that maintainer, and the pull request is still a Depen
 request, so it still gets a summary. A workflow re-run of the original event keeps the original
 sender, so it is unaffected either way.
 
-Every other pull request runs a neutral step and reports success. The job is never skipped, so
-it cannot leave a skipped status on a head commit that otherwise has every check green.
+Every other pull request skips the job, so it starts no runner and takes no place in the
+runner queue behind the required checks (C5.4). Skipping is safe because this workflow is not a
+required status check: the ruleset never waits for it.
 
 ## Data handling
 
