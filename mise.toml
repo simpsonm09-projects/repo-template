@@ -26,6 +26,9 @@ java = "temurin-25"
 # Node runs the repository scripts and the aislop gate.
 node = "26.13.1"
 
+# AI-slop gate, pinned so CI resolves no version at run time (C7.2).
+"npm:aislop" = "0.16.1"
+
 # Linters
 "aqua:grafana/flint" = "0.22.14"
 

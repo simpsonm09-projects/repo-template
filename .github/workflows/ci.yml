@@ -29,6 +29,10 @@ jobs:
   hooks:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
+    env:
+      # This job runs lefthook and nothing else, so it installs one tool
+      # instead of the whole pinned set (C5.2).
+      MISE_NOT_FOUND_AUTO_INSTALL: "false"
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -36,6 +40,8 @@ jobs:
           persist-credentials: false
       - name: Install pinned tools
         uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+        with:
+          install_args: aqua:evilmartians/lefthook
       - name: Fetch the shared hook config
         run: lefthook install
       - name: Assert the merged config
@@ -52,29 +58,29 @@ jobs:
 
   lint:
     if: github.repository_owner == 'simpsonm09-projects'
-    uses: simpsonm09-projects/repo-standard/.github/workflows/lint.yml@301bf82b937f8d6a09da73e9a22030bce2acd2e1 # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/lint.yml@383d27c2f08fe82a20df52e086704133ae711907 # repo-standard, pinned commit
   aislop:
     if: github.repository_owner == 'simpsonm09-projects'
     permissions:
       contents: read
       security-events: write
-    uses: simpsonm09-projects/repo-standard/.github/workflows/aislop.yml@301bf82b937f8d6a09da73e9a22030bce2acd2e1 # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/aislop.yml@383d27c2f08fe82a20df52e086704133ae711907 # repo-standard, pinned commit
   security:
     if: github.repository_owner == 'simpsonm09-projects'
     permissions:
       contents: read
       security-events: write
-    uses: simpsonm09-projects/repo-standard/.github/workflows/security.yml@301bf82b937f8d6a09da73e9a22030bce2acd2e1 # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/security.yml@383d27c2f08fe82a20df52e086704133ae711907 # repo-standard, pinned commit
   standard:
     if: github.repository_owner == 'simpsonm09-projects'
     permissions:
       contents: read
-    uses: simpsonm09-projects/repo-standard/.github/workflows/standard.yml@301bf82b937f8d6a09da73e9a22030bce2acd2e1 # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/standard.yml@383d27c2f08fe82a20df52e086704133ae711907 # repo-standard, pinned commit
   coverage:
     if: github.repository_owner == 'simpsonm09-projects'
     permissions:
       contents: read
-    uses: simpsonm09-projects/repo-standard/.github/workflows/coverage.yml@301bf82b937f8d6a09da73e9a22030bce2acd2e1 # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/coverage.yml@383d27c2f08fe82a20df52e086704133ae711907 # repo-standard, pinned commit
 
   test:
     if: github.repository_owner == 'simpsonm09-projects'
@@ -87,6 +93,15 @@ jobs:
           persist-credentials: false
       - name: Install pinned tools
         uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
+      - name: Restore the Gradle cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
       - name: Test
         run: just test
       - name: Test the Dependabot summary workflow

@@ -15,34 +15,26 @@ concurrency:
 
 jobs:
   summary:
+    # Dependabot pull requests only. Every other pull request used to start a
+    # runner that echoed one line, and it queued behind the required checks
+    # (C5.4). The author, not the event sender, decides: a maintainer who
+    # reopens or edits a bot pull request is still looking at a Dependabot
+    # pull request.
+    if: >-
+      github.repository == 'simpsonm09-projects/repo-template'
+      && github.event.pull_request.user.login == 'dependabot[bot]'
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
       pull-requests: read
-    env:
-      # The pull request author must be Dependabot, in this exact repository.
-      # The event sender is deliberately not checked: a maintainer who reopens
-      # or edits a bot pull request is a new webhook event whose sender is the
-      # maintainer, and the pull request is still a Dependabot pull request.
-      # The job still runs for every other pull request so it reports success
-      # instead of skipping.
-      IS_DEPENDABOT: >-
-        ${{ github.repository == 'simpsonm09-projects/repo-template'
-        && github.event.pull_request.user.login == 'dependabot[bot]' }}
     steps:
-      - name: Note a pull request without Dependabot metadata
-        if: env.IS_DEPENDABOT != 'true'
-        run: echo "This pull request is not a Dependabot pull request in the pilot repository. No summary was produced."
-
       - name: Fetch Dependabot metadata
         id: metadata
-        if: env.IS_DEPENDABOT == 'true'
         uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
         with:
           github-token: ${{ github.token }}
 
       - name: Render the reviewer summary
-        if: env.IS_DEPENDABOT == 'true'
         env:
           DEPENDENCY_NAMES: ${{ steps.metadata.outputs.dependency-names }}
           DEPENDENCY_TYPE: ${{ steps.metadata.outputs.dependency-type }}
