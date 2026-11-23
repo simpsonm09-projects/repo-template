@@ -49,13 +49,13 @@ const PILOT_REPOSITORIES = [PILOT_REPOSITORY];
 // evaluate this text rather than a second copy of the predicate, so they
 // cannot pass after the workflow changes.
 function declaredBotConditions() {
-  const start = WORKFLOW.indexOf('IS_DEPENDABOT: >-');
-  assert.notEqual(start, -1, 'the workflow does not declare IS_DEPENDABOT');
+  const start = WORKFLOW.indexOf('if: >-');
+  assert.notEqual(start, -1, 'the workflow does not declare a job-level guard');
   const tail = WORKFLOW.slice(start);
   const end = tail.search(/\n {4}\S/);
   const block = end === -1 ? tail : tail.slice(0, end);
   return block
-    .replace(/^[\s\S]*?IS_DEPENDABOT: >-/, ' ')
+    .replace(/^[\s\S]*?if: >-/, ' ')
     .replace(/\$\{\{|\}\}/g, ' ')
     .split('&&')
     .map((value) => value.trim().replace(/\s+/g, ' '))
@@ -243,7 +243,8 @@ test('workflow keeps the read-only, checkout-free contract', () => {
   assert.doesNotMatch(WORKFLOW, /github\.event\.sender/);
   assert.match(WORKFLOW, /timeout-minutes: 5/);
   assert.match(WORKFLOW, /cancel-in-progress: true/);
-  assert.match(WORKFLOW, /if: env\.IS_DEPENDABOT != 'true'/);
-  assert.match(WORKFLOW, /if: env\.IS_DEPENDABOT == 'true'/);
-  assert.doesNotMatch(WORKFLOW, /^ {4}if:/m);
+  // The guard is the job's `if:`, so a non-Dependabot pull request skips the
+  // job without starting a runner. It is not a required check, so the skip
+  // leaves nothing waiting.
+  assert.match(WORKFLOW, /^ {4}if: >-$/m);
 });
