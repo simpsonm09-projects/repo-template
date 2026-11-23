@@ -11,11 +11,11 @@ repositories.
 
 ## Commands
 
-- `just install`, `just deps`, `just lint`, `just test`, `just coverage`, `just spec`, `just verify`.
+- `just install`, `just deps`, `just fmt-check`, `just lint`, `just complexity`, `just test`, `just coverage`, `just spec`, `just check`, `just agent-files`.
 
 ## Repo facts
 
-- Language and toolchain: Kotlin version is set in `build.gradle.kts`; Java and Gradle versions are pinned in `mise.toml`. Spring Boot uses Gradle with the Kotlin DSL.
+- Language and toolchain: Kotlin version is set in `build.gradle.kts`; Java, Gradle and Node versions are pinned in `mise.toml`. Spring Boot uses Gradle with the Kotlin DSL. Kotlin formatting is ktlint; the `.mjs` helpers run on Node until they port to Bun TypeScript.
 - Data: H2 in memory, `spring.jpa.hibernate.ddl-auto=update`, entity `persistence.ItemEntity` in the `items` table. The `dev` profile seeds three items.
 - Domain: item CRUD. Reads and deletes of an unknown id raise `ItemNotFoundException`, which `GlobalExceptionHandler` maps to a 404 problem detail.
 - Coverage: JaCoCo writes `build/reports/jacoco/test/jacocoTestReport.xml`; `scripts/jacoco-to-lcov.mjs` converts it to lcov for the patch gate.

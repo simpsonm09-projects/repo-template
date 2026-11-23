@@ -43,7 +43,7 @@ function bullet(output, label) {
 }
 
 const PILOT_REPOSITORY = 'simpsonm09-projects/repo-template';
-const PILOT_REPOSITORIES = ['simpsonm09-org/simpsonm09-repo-template', PILOT_REPOSITORY];
+const PILOT_REPOSITORIES = [PILOT_REPOSITORY];
 
 // Read the bot conditions from the workflow exactly as written. The tests
 // evaluate this text rather than a second copy of the predicate, so they
@@ -71,9 +71,8 @@ function readContext(context, path) {
     .reduce((value, key) => (value === undefined || value === null ? undefined : value[key]), context);
 }
 
-// One `&&` conjunct may offer several equalities joined by `||` while the
-// organization rename is in flight: the pilot repository answers to either
-// owner spelling. The conjunct holds when any alternative matches the fixture.
+// One `&&` conjunct may offer several equalities joined by `||`. The conjunct
+// holds when any alternative matches the fixture.
 function matchesConjunct(context, conjunct) {
   const alternatives = conjunct.replace(/^\((.*)\)$/, '$1').split('||').map((value) => value.trim());
   return alternatives.some((alternative) => {
