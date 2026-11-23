@@ -20,7 +20,7 @@ repositories.
 - Domain: item CRUD. Reads and deletes of an unknown id raise `ItemNotFoundException`, which `GlobalExceptionHandler` maps to a 404 problem detail.
 - Coverage: JaCoCo writes `build/reports/jacoco/test/jacocoTestReport.xml`; `scripts/jacoco-to-lcov.mjs` converts it to lcov for the patch gate.
 - `docs/` holds the documentation; `docs/README.md` is the index and `docs/manifest.json` declares the feature, diagram, and API documents.
-- Hooks: `just hooks` installs the shared Lefthook jobs from `simpsonm09-projects/.github` at the `hooks-v2` tag; `lefthook-local.yml` is git-ignored. Never skip a hook: no `LEFTHOOK=0`, no `--no-verify`, and never create `lefthook-local.yml` (C7.11). The ruleset is the real gate.
+- Hooks: `just hooks` installs the shared Lefthook jobs from `simpsonm09-projects/.github` at the `hooks-v3` tag; `lefthook-local.yml` is git-ignored. Never skip a hook: no `LEFTHOOK=0`, no `--no-verify`, and never create `lefthook-local.yml` (C7.11). The ruleset is the real gate.
 
 ## Skills
 
