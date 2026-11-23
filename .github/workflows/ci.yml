@@ -52,29 +52,29 @@ jobs:
 
   lint:
     if: github.repository_owner == 'simpsonm09-projects'
-    uses: simpsonm09-projects/repo-standard/.github/workflows/lint.yml@91db701482604638c5428aaf35ffa29a1bdee1c2 # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/lint.yml@5521ddab95a198a46fca80464c6f72ae699702bf # repo-standard, pinned commit
   aislop:
     if: github.repository_owner == 'simpsonm09-projects'
     permissions:
       contents: read
       security-events: write
-    uses: simpsonm09-projects/repo-standard/.github/workflows/aislop.yml@91db701482604638c5428aaf35ffa29a1bdee1c2 # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/aislop.yml@5521ddab95a198a46fca80464c6f72ae699702bf # repo-standard, pinned commit
   security:
     if: github.repository_owner == 'simpsonm09-projects'
     permissions:
       contents: read
       security-events: write
-    uses: simpsonm09-projects/repo-standard/.github/workflows/security.yml@91db701482604638c5428aaf35ffa29a1bdee1c2 # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/security.yml@5521ddab95a198a46fca80464c6f72ae699702bf # repo-standard, pinned commit
   standard:
     if: github.repository_owner == 'simpsonm09-projects'
     permissions:
       contents: read
-    uses: simpsonm09-projects/repo-standard/.github/workflows/standard.yml@91db701482604638c5428aaf35ffa29a1bdee1c2 # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/standard.yml@5521ddab95a198a46fca80464c6f72ae699702bf # repo-standard, pinned commit
   coverage:
     if: github.repository_owner == 'simpsonm09-projects'
     permissions:
       contents: read
-    uses: simpsonm09-projects/repo-standard/.github/workflows/coverage.yml@91db701482604638c5428aaf35ffa29a1bdee1c2 # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/coverage.yml@5521ddab95a198a46fca80464c6f72ae699702bf # repo-standard, pinned commit
 
   test:
     if: github.repository_owner == 'simpsonm09-projects'
