@@ -9,8 +9,8 @@ their local changes before updating them.
 
 Decide these before the first pull request. Each item links to the standard for the rule.
 
-- **Coverage.** Keep the `coverage` job in `.github/workflows/ci.yml` when the repository has code the shared coverage workflow can measure, as this template does. Otherwise remove the job and add an entry on `ci/coverage` to the standard's `docs/exceptions.json`, with the reason. See [governance](https://github.com/simpsonm09-projects/repo-standard/blob/main/docs/governance.md#required-checks).
-- **CodeQL.** Add `.github/workflows/codeql.yml` from the standard's `templates/workflows/codeql.yml` when the repository has executable source in a language CodeQL supports. Replace the `LANGUAGES` placeholder. This template carries none. See [automation](https://github.com/simpsonm09-projects/repo-standard/blob/main/docs/automation.md#codeql).
+- **Coverage.** Keep the `coverage` job in `.github/workflows/ci.yml` when the repository has code the shared coverage workflow can measure, as this template does. Otherwise remove the job and add a `ci/coverage` row to this repository's [`docs/exceptions.md`](../exceptions.md), with the reason. See [governance](https://github.com/simpsonm09-projects/repo-standard/blob/main/docs/governance.md#required-checks).
+- **CodeQL.** Turn on CodeQL default setup in the repository settings. Do not add a `codeql.yml`; the default setup covers the languages the repository actually contains, and a second workflow duplicates the scan. See [automation](https://github.com/simpsonm09-projects/repo-standard/blob/main/docs/automation.md#codeql).
 - **Pin drift.** Keep `.github/workflows/pin-update.yml`. It opens a tracking issue when the standard pin in `ci.yml` falls behind the standard's `main`. See [automation](https://github.com/simpsonm09-projects/repo-standard/blob/main/docs/automation.md#dependency-and-action-updates).
 - **Secrets.** A human reaches a secret only through dev-setup's `with-secrets`, and an agent through `with-vault --role agent`. Never load secrets through `.envrc`. The `.env.example` file names the local values and loads nothing.
 
@@ -32,10 +32,10 @@ for one command.
 
 ## Validation
 
-Run `just lint`, `just complexity`, `just test`, and `just coverage`. `just verify`
-runs lint, complexity, and tests. The recipes run the pinned tools through
+Run `just fmt-check`, `just lint`, `just complexity`, `just test`, and `just coverage`.
+`just check` runs everything CI requires. The recipes run the pinned tools through
 `mise exec --`, so `just test` needs no extra prefix once `mise install` has run.
-`coverage` also runs `node`, which `mise.toml` does not pin. It uses the Node on PATH.
+`mise.toml` pins Node for the `.mjs` helpers and the aislop gate.
 
 Coverage writes `coverage/lcov.info`. The shared CI workflow runs the pinned
 standard's patch gate at 80 percent of changed lines and 70 percent of changed

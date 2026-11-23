@@ -16,7 +16,7 @@ do not show.
 
 The job summarizes only when both conditions hold:
 
-- `github.repository` is exactly `simpsonm09-projects/repo-template`, or its pre-rename `simpsonm09-org` spelling.
+- `github.repository` is exactly `simpsonm09-projects/repo-template`.
 - The pull request author is `dependabot[bot]`.
 
 The event sender is not checked. A maintainer who reopens or edits a bot pull request creates a
@@ -69,7 +69,7 @@ commit verification is not a trust decision, and no value from it is presented a
 execute that exact source against normal, hostile, oversized, and missing metadata. They use
 no network, no GitHub token, and no write.
 
-`just lint` runs actionlint and zizmor over the workflow with the other linters. `just verify`
+`just lint` runs actionlint and zizmor over the workflow with the other linters. `just check`
 runs `test-workflow` after the application tests, and the CI `test` job calls
 `just test-workflow` explicitly, so the tests gate the pull request either way.
 

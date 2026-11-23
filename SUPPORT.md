@@ -8,5 +8,5 @@
 
 ## Before you ask
 
-- Run `just verify` and include the output.
+- Run `just check` and include the output.
 - Search the open and closed issues for the same problem.

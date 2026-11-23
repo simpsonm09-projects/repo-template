@@ -4,7 +4,7 @@
 [tools]
 
 # Task runner
-"aqua:casey/just" = "1.58.0"
+"aqua:casey/just" = "1.59.0"
 "aqua:gradle/gradle" = "9.1.0"
 "aqua:pinterest/ktlint" = "1.5.0"
 
@@ -18,6 +18,9 @@
 
 # JVM toolchain
 java = "temurin-25"
+
+# Node runs the repository scripts and the aislop gate.
+node = "26.13.1"
 
 # Linters
 "aqua:grafana/flint" = "0.22.14"

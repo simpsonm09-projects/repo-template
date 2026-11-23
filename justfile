@@ -15,6 +15,14 @@ install:
 deps:
     mise exec -- gradle dependencies
 
+# Format Kotlin with ktlint.
+fmt:
+    mise exec -- ktlint --format
+
+# Check Kotlin formatting with ktlint.
+fmt-check:
+    mise exec -- ktlint
+
 # Run every linter over the tracked files.
 lint:
     mise exec -- flint run --full
@@ -35,9 +43,9 @@ aislop:
 test:
     mise exec -- gradle test
 
-# Run the offline tests for the Dependabot summary workflow.
+# Run the offline tests for the repository scripts.
 test-workflow:
-    mise exec -- node --test scripts/dependabot-summary.test.mjs
+    mise exec -- node --test scripts/dependabot-summary.test.mjs scripts/agent-files.test.mjs
 
 # Run the tests with coverage and convert the JaCoCo report to lcov.
 coverage:
@@ -48,8 +56,21 @@ coverage:
 spec:
     mise exec -- gradle generateOpenApi
 
-# Lint, check complexity, test, and test the workflow.
-verify: lint complexity test test-workflow
+# Fail when the generated API document differs from the code.
+spec-check:
+    mise exec -- gradle generateOpenApi
+    git diff --exit-code -- docs/openapi.json
+
+# Everything CI requires.
+check: fmt-check lint complexity test test-workflow spec-check
+
+# Install the guarded git hook.
+hooks:
+    git config --local core.hooksPath .githooks
+
+# Check the .agents/skills tree and its .claude/skills links.
+agent-files:
+    mise exec -- node scripts/agent-files.mjs
 
 # Prune remote-tracking refs and delete local branches merged into main.
 prune:

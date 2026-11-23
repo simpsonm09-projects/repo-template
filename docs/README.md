@@ -15,3 +15,7 @@ Index for the `repo-template` service, a layered Kotlin and Spring Boot item CRU
 ## API
 
 - [OpenAPI document](openapi.json) is generated from the code. Run `just spec` to regenerate it.
+
+## Reference
+
+- [Exceptions](exceptions.md) records the rules this repository does not meet yet.
