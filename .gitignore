@@ -28,3 +28,6 @@ trivy.sarif
 .envrc
 .envrc.*
 !.envrc.example
+
+# Local Lefthook overrides (never committed)
+lefthook-local.yml
