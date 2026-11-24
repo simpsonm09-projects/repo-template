@@ -28,11 +28,7 @@ jobs:
         run: just fmt-check
   hooks:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
-    env:
-      # This job runs lefthook and nothing else, so it installs one tool
-      # instead of the whole pinned set (C5.2).
-      MISE_NOT_FOUND_AUTO_INSTALL: "false"
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -40,9 +36,9 @@ jobs:
           persist-credentials: false
       - name: Install pinned tools
         uses: jdx/mise-action@9b200bcecbfd6303e69a4a261b2e09e3757440a7 # v5.2.0
-        with:
-          install_args: aqua:evilmartians/lefthook
       - name: Fetch the shared hook config
+        # `install` fetches the public `hooks-v3` tag into
+        # `.git/info/lefthook-remotes`; `validate` alone silently skips remotes.
         run: lefthook install
       - name: Assert the merged config
         run: |
@@ -55,32 +51,40 @@ jobs:
           done
       - name: Validate hook config
         run: lefthook validate
+      # The required checks are the recipes the hooks run (C5.7). These four
+      # only ever run from a hook, so this job is where CI confirms them.
+      - name: Confirm the hook recipes
+        run: |
+          just agent-files
+          git ls-files -z | xargs -0 -r just forbidden-files
+          just workflows
+          git ls-files -z -- '*.sh' '*.bash' | xargs -0 -r just shellcheck
 
   lint:
     if: github.repository_owner == 'simpsonm09-projects'
-    uses: simpsonm09-projects/repo-standard/.github/workflows/lint.yml@0f3a767985d84ed9baec257d97ea21b2df8f79ba # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/lint.yml@60a4eea1170f97ac967c4224ee4ee58ce3959c3d # repo-standard, pinned commit
   aislop:
     if: github.repository_owner == 'simpsonm09-projects'
     permissions:
       contents: read
       security-events: write
-    uses: simpsonm09-projects/repo-standard/.github/workflows/aislop.yml@0f3a767985d84ed9baec257d97ea21b2df8f79ba # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/aislop.yml@60a4eea1170f97ac967c4224ee4ee58ce3959c3d # repo-standard, pinned commit
   security:
     if: github.repository_owner == 'simpsonm09-projects'
     permissions:
       contents: read
       security-events: write
-    uses: simpsonm09-projects/repo-standard/.github/workflows/security.yml@0f3a767985d84ed9baec257d97ea21b2df8f79ba # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/security.yml@60a4eea1170f97ac967c4224ee4ee58ce3959c3d # repo-standard, pinned commit
   standard:
     if: github.repository_owner == 'simpsonm09-projects'
     permissions:
       contents: read
-    uses: simpsonm09-projects/repo-standard/.github/workflows/standard.yml@0f3a767985d84ed9baec257d97ea21b2df8f79ba # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/standard.yml@60a4eea1170f97ac967c4224ee4ee58ce3959c3d # repo-standard, pinned commit
   coverage:
     if: github.repository_owner == 'simpsonm09-projects'
     permissions:
       contents: read
-    uses: simpsonm09-projects/repo-standard/.github/workflows/coverage.yml@0f3a767985d84ed9baec257d97ea21b2df8f79ba # repo-standard, pinned commit
+    uses: simpsonm09-projects/repo-standard/.github/workflows/coverage.yml@60a4eea1170f97ac967c4224ee4ee58ce3959c3d # repo-standard, pinned commit
     with:
       # The coverage job runs on its own runner; restore the same package
       # cache the other jobs use instead of rebuilding (C5.2).
